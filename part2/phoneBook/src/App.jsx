@@ -5,12 +5,15 @@ import Persons from "./components/Persons";
 import axios from "axios";
 import { useEffect } from "react";
 import personService from "./services/persons";
+import Notification from "./components/Notification";
 
 function App() {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [msg, setMsg] = useState(null);
+  const [msgType, setMsgType] = useState("");
 
   useEffect(() => {
     personService.getAllPersons().then((res) => {
@@ -46,8 +49,11 @@ function App() {
           setPersons(persons.concat(res.data));
           setNewName("");
           setNewNumber("");
+          showMsg(`Added ${personObject.name}!!!`);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          showMsg("Failed to add a person", "error");
+        });
     }
   };
 
@@ -55,6 +61,7 @@ function App() {
     e.preventDefault();
     setNewName(e.target.value);
   };
+
   const handlePersonNumberChange = (e) => {
     e.preventDefault();
     setNewNumber(e.target.value);
@@ -69,15 +76,20 @@ function App() {
   );
 
   const handleUpdatePerson = (id, updatePerson) => {
-    console.log(updatePerson);
     personService
       .update(id, updatePerson)
       .then((res) => {
         setPersons(
           persons.map((person) => (person.id === id ? res.data : person))
         );
+        showMsg(
+          `Person ${updatePerson.name} is updated successfully`,
+          "success"
+        );
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        showMsg("Failed to update a person", "error");
+      });
   };
 
   const handleDeletePerson = (id, name) => {
@@ -87,14 +99,26 @@ function App() {
         .deletePerson(id)
         .then(() => {
           setPersons(persons.filter((person) => person.id !== id));
+          showMsg("Person deleted successfully", "success");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          showMsg("Failed to delete a person", "error");
+        });
     }
+  };
+
+  const showMsg = (text, type) => {
+    setMsg(text);
+    setMsgType(type);
+    setTimeout(() => {
+      setMsg(null);
+    }, 5000);
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification msg={msg} type={msgType} />
       <Filter onChange={handleFilterChange} value={filter} />
       <h2>add a new</h2>
       <PersonForm
