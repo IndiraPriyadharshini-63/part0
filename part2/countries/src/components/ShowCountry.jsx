@@ -1,6 +1,6 @@
 import React from "react";
 
-const ShowCountry = ({ country, weather, language, error }) => {
+const ShowCountry = ({ country, weather, language }) => {
   return (
     <div>
       <h3>{country.name.common}</h3>
@@ -15,9 +15,13 @@ const ShowCountry = ({ country, weather, language, error }) => {
           <h3>Weather in {country.capital[0]}</h3>
           <p>Temperature: {weather.main.temp} Celcius</p>
           <p>Wind Speed:{weather.wind.speed} m/s</p>
+
+          <img
+            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
+            alt={`${weather.weather[0].description} image`}
+          />
         </div>
       )}
-      {error && <p>{error}</p>}
     </div>
   );
 };

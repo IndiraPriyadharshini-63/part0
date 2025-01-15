@@ -10,7 +10,6 @@ const App = () => {
   const [searchItem, setSearchItem] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [weather, setWeather] = useState(null);
-  const [apiError, setApiError] = useState(null);
 
   useEffect(() => {
     if (searchItem.trim() === "") {
@@ -43,11 +42,9 @@ const App = () => {
       const v2_5 = `https://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${apiKey}&units=metric`;
       const weatherResponse = await axios.get(v2_5);
       setWeather(weatherResponse.data);
-      setApiError(null);
     } catch (error) {
       console.error("Error while fetching weather", error.data);
       setWeather(null);
-      setApiError("Failed to fetch weather data");
     }
   };
 
@@ -92,7 +89,6 @@ const App = () => {
           country={selectedCountry}
           weather={weather}
           language={language}
-          error={apiError}
         />
       )}
     </div>
