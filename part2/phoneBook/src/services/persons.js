@@ -1,5 +1,6 @@
 import axios from "axios";
-const url = "http://localhost:3001/persons";
+// const url = "http://localhost:3001/api/persons";
+const url = "/api/persons";
 
 const getAllPersons = () => {
   return axios.get(url);
