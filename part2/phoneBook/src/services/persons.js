@@ -14,7 +14,7 @@ const update = (id, newObj) => {
   return axios.put(`${url}/${id}`, newObj);
 };
 const deletePerson = (id) => {
-  return axios.put(`${url}/${id}`);
+  return axios.delete(`${url}/${id}`);
 };
 
 export default {

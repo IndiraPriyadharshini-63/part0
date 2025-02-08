@@ -129,9 +129,8 @@ function App() {
         submit={addPerson}
       />
       <h2>Numbers</h2>
-
       <div>
-        {filteredPerson.map((filterPerson) => (
+        {filteredPerson?.map((filterPerson) => (
           <Persons
             key={filterPerson.id}
             person={filterPerson}
