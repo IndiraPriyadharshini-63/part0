@@ -51,8 +51,9 @@ function App() {
           setNewNumber("");
           showMsg(`Added ${personObject.name}!!!`);
         })
-        .catch((err) => {
-          showMsg("Failed to add a person", "error");
+        .catch((error) => {
+          // console.log(error.response.data);
+          showMsg(error.response.data.error, "error");
         });
     }
   };
