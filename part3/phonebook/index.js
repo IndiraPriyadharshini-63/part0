@@ -5,6 +5,7 @@ require("dotenv").config();
 const app = express();
 app.use(express.json());
 app.use(morgan("tiny"));
+app.use(express.static("dist"));
 app.use(cors());
 const Person = require("./models/person");
 const PORT = process.env.PORT || 3001;
@@ -119,6 +120,10 @@ app.post("/api/persons", (req, res, next) => {
   const name = req.body.name;
   const number = req.body.number;
 
+  if (name === undefined) {
+    return response.status(400).json({ error: "name missing" });
+  }
+
   let person = new Person({
     name: name,
     number: number,
@@ -142,8 +147,13 @@ app.delete("/api/persons/:id", (req, res, next) => {
 
 app.put("/api/persons/:id", (req, res, next) => {
   const id = req.params.id;
+  const name = req.body.name;
   const number = req.body.number;
-  Person.findByIdAndUpdate(id, { number: number }, { new: true })
+  Person.findByIdAndUpdate(
+    id,
+    { name: name, number: number },
+    { new: true, runValidators: true, context: "query" }
+  )
     .then((updatedPerson) => {
       if (updatedPerson) {
         res.json(updatedPerson);
@@ -174,6 +184,8 @@ const errorHandler = (error, req, res, next) => {
 
   if (error.name === "CastError") {
     return res.status(400).send({ error: "malformatted id" });
+  } else if (error.name === "ValidationError") {
+    return res.status(400).json({ error: error.message });
   }
 
   next(error);
