@@ -29,7 +29,7 @@ if (name && number) {
 
   person
     .save()
-    .then((result) => {
+    .then((_result) => {
       console.log(`added ${name} number ${number} to phoneBook `);
     })
     .catch((err) => console.error("Error while saving the person", err));

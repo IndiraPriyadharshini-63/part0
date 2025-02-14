@@ -23,87 +23,6 @@ app.use(
   )
 );
 
-// let persons = [
-//   {
-//     id: "1",
-//     name: "Arto Hellas",
-//     number: "040-123456",
-//   },
-//   {
-//     id: "2",
-//     name: "Ada Lovelace",
-//     number: "39-44-5323523",
-//   },
-//   {
-//     id: "3",
-//     name: "Dan Abramov",
-//     number: "12-43-234345",
-//   },
-//   {
-//     id: "4",
-//     name: "Mary Poppendieck",
-//     number: "39-23-6423122",
-//   },
-// ];
-
-// const generateId = () => {
-//   const newId = Math.floor(Math.random() * 10000);
-//   return String(newId);
-// };
-
-// app.post("/api/persons", (req, res) => {
-//   const name = req.body.name;
-//   const number = req.body.number;
-//   const isNameExists = persons.some(
-//     (entry) => entry.name.toLowerCase() === name.toLowerCase()
-//   );
-//   if (!name || !number) {
-//     return res.status(400).json({
-//       error: "Content missing",
-//     });
-//   } else if (isNameExists) {
-//     return res.status(422).json({
-//       error: "name must be unique",
-//     });
-//   } else {
-//     const person = {
-//       name: name,
-//       number: number,
-//       id: generateId(),
-//     };
-
-//     persons = persons.concat(person);
-//     res.json(person);
-//   }
-// });
-
-// app.get("/api/persons", (req, res) => {
-//   res.json(persons);
-// });
-
-// app.get("/api/persons/:id", (req, res) => {
-//   const id = req.params.id;
-//   const person = persons.find((person) => person.id === id);
-//   if (person) {
-//     res.json(person);
-//   } else {
-//     res.status(404).end();
-//   }
-// });
-
-// app.get("/info", (req, res) => {
-//   const count = persons.length;
-//   const message = `<div><br/><p>Phonebook has info for ${count} people</p><p>${new Date().toString()}</p></div>`;
-//   res.send(message);
-// });
-
-// app.delete("/api/persons/:id", (req, res) => {
-//   const id = Number(req.params.id);
-//   const deletedPerson = persons.filter((person) => person.id === id);
-//   res.send(deletedPerson)
-
-// });
-
 app.get("/api/persons", (req, res, next) => {
   Person.find({})
     .then((persons) => {
@@ -121,7 +40,7 @@ app.post("/api/persons", (req, res, next) => {
   const number = req.body.number;
 
   if (name === undefined) {
-    return response.status(400).json({ error: "name missing" });
+    return res.status(400).json({ error: "name missing" });
   }
 
   let person = new Person({
