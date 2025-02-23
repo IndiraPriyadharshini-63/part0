@@ -12,17 +12,6 @@ const totalLikes = (blogs) => {
   return blogsLikes.reduce(reducer, 0);
 };
 
-// const favouriteBlog = (blogs) => {
-//   const blogLikes = blogs.map((blogs) => blogs.likes);
-//   const largestIndex = blogLikes.indexOf(Math.max(...blogLikes));
-//   const largestBlog = blogs[largestIndex];
-//   return {
-//     title: largestBlog.title,
-//     author: largestBlog.author,
-//     likes: largestBlog.likes,
-//   };
-// };
-
 const favoriteBlog = (blogs) => {
   return blogs.length === 0
     ? {}
@@ -56,4 +45,21 @@ const mostBlogs = (blogs) => {
   };
 };
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs };
+const mostLikes = (blogs) => {
+  const groupedBlogs = _.groupBy(blogs, "author");
+  const countedAuthors = _.map(groupedBlogs, (arr) => {
+    return {
+      author: arr[0].author,
+      likes: _.sumBy(arr, "likes"),
+    };
+  });
+  const maxLikesAuthor = _.maxBy(countedAuthors, (a) => a.likes);
+  const authorName = _.head(_.values(maxLikesAuthor));
+
+  return {
+    author: authorName,
+    likes: maxLikesAuthor.likes,
+  };
+};
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes };
